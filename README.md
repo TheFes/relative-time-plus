@@ -1,3 +1,7 @@
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
+![Version](https://img.shields.io/github/v/release/TheFes/relative-time-plus)
+![Downloads](https://img.shields.io/github/downloads/TheFes/relative-time-plus/total)
+
 # Relative Time Plus
 
 A jinja macro to display the difference between two datetimes in a readable format
