@@ -1,0 +1,6 @@
+{
+  "name": "Relative Time Plus",
+  "content_in_root": true,
+  "filename": "relative_time_plus.jinja",
+  "homeassistant": "2023.4.0"
+}
