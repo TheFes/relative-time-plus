@@ -28,7 +28,7 @@ Example usage:
 {{ relative_time_plus(states('sensor.uptime'), parts=3, week=false, time=true, verbose=true, language='nl') }}
 ```
 This will output something like
-`3 dagen, 2 uur en 7 minuten`
+`10 dg, 2 u en 7 min`
 
 ## My language is not suported
 You can either issue a PR with the language phrases, or create an issue with all the required phrases (so singular, plural and verbose per time section, a combine word and an error text) in an issue.
