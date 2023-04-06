@@ -7,7 +7,7 @@ A jinja macro to display the difference between two datetimes in a readable form
 I hear you thinking, there is already a `relative_time` filter/function in Home Assistant. And of course this is true, but it only returns the text in English, and always only returns the biggest time fraction. So this macro supports multiple languages (currently Dutch and English) and has some additional options.
 
 ## How to install
-Install it from the template section in HACS, or copy the contents of `relative_time_plus.jinja` to a jinja file in your `custom_templates` folder
+Install it in HACS, or copy the contents of `relative_time_plus.jinja` to a jinja file in your `custom_templates` folder
 
 ## How to use
 The only required field is the datetime you want to show as relative time. It can be eiter in the past or future, and you can use a datetime object, a timestamp (integer or float) or anything which can be converted to a datetime object using `as_datetime`.
