@@ -12,8 +12,9 @@ Install it from the template section in HACS, or copy the contents of `relative_
 ## How to use
 The only required field is the datetime you want to show as relative time. It can be eiter in the past or future, and you can use a datetime object, a timestamp (integer or float) or anything which can be converted to a datetime object using `as_datetime`.
 Other optional fields are:
+
 |name|type|default|example|description|
-|---|---|---|---|
+|---|---|---|---|---|
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
 |`week`|boolean|`true`|`false`|Set to `false` to not split in weeks, but add those to the amount of days|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
