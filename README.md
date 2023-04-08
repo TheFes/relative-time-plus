@@ -50,8 +50,8 @@ Using a date string:
 {{ relative_time_plus('2023-01-01', parts=2, time=false, week=false) }}
 ```
 
-This will output something like
-`4 months and 8 days`
+This will output something like (assuming the current date is 9th of April 2023)
+`3 months and 8 days`
 
 ## My language is not suported
 You can either issue a PR with the language phrases, or create an issue with all the required phrases (so singular, plural and verbose per time section, a combine word and an error text) in an issue.
