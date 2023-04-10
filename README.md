@@ -19,6 +19,7 @@ Current supported languages:
 * English - [TheFes](https://github.com/TheFes)
 * Dutch - [TheFes](https://github.com/TheFes)
 * Italian - [SiriosDev](https://github.com/SiriosDev)
+* German - [fastlane086](https://github.com/fastlane086)
 
 ## How to use
 The only required field is the datetime you want to show as relative time. It can be eiter in the past or future, and you can use a datetime object, a timestamp (integer or float) or anything which can be converted to a datetime object using `as_datetime`.
