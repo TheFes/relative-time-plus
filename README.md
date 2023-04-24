@@ -16,10 +16,11 @@ Run the `homeassistant.reload_custom_templates` service call to load the file.
 ## Languages
 Current supported languages:
 
-* English - [TheFes](https://github.com/TheFes)
 * Dutch - [TheFes](https://github.com/TheFes)
-* Italian - [SiriosDev](https://github.com/SiriosDev)
+* English - [TheFes](https://github.com/TheFes)
+* French - [Pulpyyyy](https://github.com/Pulpyyyy)
 * German - [fastlane086](https://github.com/fastlane086)
+* Italian - [SiriosDev](https://github.com/SiriosDev)
 
 ## How to use
 The only required field is the datetime you want to show as relative time. It can be eiter in the past or future, and you can use a datetime object, a timestamp (integer or float) or anything which can be converted to a datetime object using `as_datetime`.
