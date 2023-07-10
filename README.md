@@ -32,7 +32,7 @@ Other optional fields are:
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
 |`week`|boolean|`true`|`false`|Set to `false` to not split in weeks, but add those to the amount of days|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
-|`verbose`|boolean|`false`|`true`|Set to `true` to use the verbose phrases|
+|`abbr`|boolean|`false`|`true`|Set to `true` to use the abbriviateda phrases|
 |`language`|string|`"en"`|`"nl"`|The language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
 
@@ -40,7 +40,7 @@ Example usage:
 Using a sensor state:
 ```jinja
 {% from 'relative_time_plus.jinja' import relative_time_plus %}
-{{ relative_time_plus(states('sensor.uptime'), parts=3, week=false, time=true, verbose=true, language='nl') }}
+{{ relative_time_plus(states('sensor.uptime'), parts=3, week=false, time=true, abbr=true, language='nl') }}
 ```
 This will output something like
 `10 dg, 2 u en 7 min`
@@ -64,4 +64,4 @@ This will output something like (assuming the current date is 9th of April 2023)
 `3 months and 8 days`
 
 ## My language is not suported
-You can either issue a PR with the language phrases, or create an issue with all the required phrases (so singular, plural and verbose per time section, a combine word and an error text) in an issue.
+You can either issue a PR with the language phrases, or create an issue with all the required phrases (so singular, plural and abbriviated per time section, a combine word and an error text) in an issue.
