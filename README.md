@@ -32,7 +32,7 @@ Other optional fields are:
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
 |`week`|boolean|`true`|`false`|Set to `false` to not split in weeks, but add those to the amount of days|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
-|`abbr`|boolean|`false`|`true`|Set to `true` to use the abbriviateda phrases|
+|`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
 |`language`|string|`"en"`|`"nl"`|The language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
 
@@ -64,4 +64,4 @@ This will output something like (assuming the current date is 9th of April 2023)
 `3 months and 8 days`
 
 ## My language is not suported
-You can either issue a PR with the language phrases, or create an issue with all the required phrases (so singular, plural and abbriviated per time section, a combine word and an error text) in an issue.
+You can either issue a PR with the language phrases, or create an issue with all the required phrases (so singular, plural and abbreviated per time section, a combine word and an error text) in an issue.
