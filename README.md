@@ -16,6 +16,7 @@ Run the `homeassistant.reload_custom_templates` service call to load the file.
 ## Languages
 Current supported languages:
 
+* Danish - [C4-Dimitri](https://github.com/C4-Dimitri)
 * Dutch - [TheFes](https://github.com/TheFes)
 * English - [TheFes](https://github.com/TheFes)
 * French - [Pulpyyyy](https://github.com/Pulpyyyy)
