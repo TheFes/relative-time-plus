@@ -22,6 +22,7 @@ Current supported languages:
 * French - [Pulpyyyy](https://github.com/Pulpyyyy)
 * German - [fastlane086](https://github.com/fastlane086)
 * Italian - [SiriosDev](https://github.com/SiriosDev)
+* Polish - [darylosu](https://github.com/darylosu)
 * Portuguese - [FragMenthor](https://github.com/FragMenthor)
 
 ## How to use
@@ -34,7 +35,7 @@ Other optional fields are:
 |`week`|boolean|`true`|`false`|Set to `false` to not split in weeks, but add those to the amount of days|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
-|`language`|string|`"en"`|`"nl"`|The language to be used for the output|
+|`language`|string|`"en"`|`"nl"`|The country code (eg `dk` for Denmark) for the language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
 
 Example usage:
