@@ -10,7 +10,15 @@ A jinja macro to display the difference between two datetimes in a readable form
 I hear you thinking, there is already a `relative_time` filter/function in Home Assistant. And of course this is true, but it only returns the text in English, and always only returns the biggest time fraction. So this macro supports multiple languages (currently Dutch and English) and has some additional options.
 
 ## How to install
-Install it in HACS, or copy the contents of `relative_time_plus.jinja` to a jinja file in your `custom_templates` folder.
+You need to have Home Assistant 2023.4 or higher installed to use custom templates.
+As of version 1.0 Home Assistant 2023.11 is required because it uses tests introduced in that version.
+
+This custom template is compatible with [HACS](https://hacs.xyz/), which means that you can easily download and manage updates for it. Custom templates are currently only available in HACS when you enable experimental features. Make sure to enable it in the HACS settings, which you can access from Settings > [Devices & Services](https://my.home-assistant.io/create-link/?redirect=integrations) > HACS When experimental features are enabled you click the button below to add it to your HACS installation
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=TheFes&repository=relative-time-plus&category=template)
+
+
+For a manual install you can copy the contents of `relative_time_plus.jinja` to a jinja file in your `custom_templates` folder.
 Run the `homeassistant.reload_custom_templates` service call to load the file.
 
 ## Languages
@@ -32,6 +40,7 @@ Other optional fields are:
 |name|type|default|example|description|
 |---|---|---|---|---|
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
+|`month`|boolean|`true`|`false`|Set to `false` to not split in months, but add those to the amount of weeks/days|
 |`week`|boolean|`true`|`false`|Set to `false` to not split in weeks, but add those to the amount of days|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
