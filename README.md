@@ -42,6 +42,7 @@ Other optional fields are:
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
 |`month`|boolean|`true`|`false`|Set to `false` to not split in months, but add those to the amount of weeks/days|
 |`week`|boolean|`true`|`false`|Set to `false` to not split in weeks, but add those to the amount of days|
+|`millisecond`|boolean|`false`|`true`|Set to `true` to include milliseconds in the output|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
 |`language`|string|`"en"`|`"nl"`|The country code (eg `dk` for Denmark) for the language to be used for the output|
