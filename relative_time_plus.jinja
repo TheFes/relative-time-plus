@@ -195,7 +195,6 @@
       {%- set week = week | bool(true) -%}
       {%- set time = time | bool(true) -%}
       {%- set abbr = abbr | bool(false) or verbose | bool(false) -%}
-      {%- set date = date if time else date.date() -%}
       {%- set time_parts = time_split(date, compare_date, month, week, time) | from_json -%}
     {#- find first non zero time period #}
       {%- set always_return = 'millisecond' if millisecond else 'second' if time else 'day' -%}
