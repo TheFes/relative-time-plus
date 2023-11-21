@@ -40,7 +40,7 @@ Other optional fields are:
 |name|type|default|example|description|
 |---|---|---|---|---|
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
-|`not_use`|list or string|`['millisecond']`|`['yr', 'minute']`|Provide the time periods you don't want to use in the output, by default only milliseconds are excluded. You can provide a list or a comma separated string, so `'yr, month'` and `['yr', 'monhth']` will both work. Possible values are `year`, `month`, `week`, `day`, `hour`, `minute`, `second`, `millisecond` or the abbreviated versions `yr`, `mth`, `wk`, `day`, `hr`, `min`, `sec`, `ms`. By default millisecond will not be used.|
+|`not_use`|list or string|`['millisecond']`|`['yr', 'minute']`|Provide the time periods you don't want to use in the output, by default only milliseconds are excluded. You can provide a list or a comma separated string, so `'yr, month'` and `['yr', 'monhth']` will both work. Possible values are `year`, `month`, `week`, `day`, `hour`, `minute`, `second`, `millisecond` or the abbreviated versions `yr`, `mth`, `wk`, `day`, `hr`, `min`, `sec`, `ms`.|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
 |`language`|string|`"en"`|`"nl"`|The country code (eg `dk` for Denmark) for the language to be used for the output|
