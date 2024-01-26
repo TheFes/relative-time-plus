@@ -26,14 +26,17 @@ Run the `homeassistant.reload_custom_templates` service call to load the file.
 ## Languages
 Current supported languages:
 
-* Danish - [C4-Dimitri](https://github.com/C4-Dimitri)
-* Dutch - [TheFes](https://github.com/TheFes)
-* English - [TheFes](https://github.com/TheFes)
-* French - [Pulpyyyy](https://github.com/Pulpyyyy)
-* German - [fastlane086](https://github.com/fastlane086)
-* Italian - [SiriosDev](https://github.com/SiriosDev)
-* Polish - [darylosu](https://github.com/darylosu)
-* Portuguese - [FragMenthor](https://github.com/FragMenthor)
+|Language|Language code|Provided by|
+|---|---|---|
+|Danish|`dk`|[C4-Dimitri](https://github.com/C4-Dimitri)|
+|Dutch|`nl`|[TheFes](https://github.com/TheFes)|
+|English|`en`|[TheFes](https://github.com/TheFes)|
+|French|`fr`|[Pulpyyyy](https://github.com/Pulpyyyy)|
+|German|`de`|[fastlane086](https://github.com/fastlane086)|
+|Italian|`it`|[SiriosDev](https://github.com/SiriosDev)|
+|Polish|`pl`|[darylosu](https://github.com/darylosu)|
+|Portuguese|`pt`|[FragMenthor](https://github.com/FragMenthor)|
+|Swedish|`sv`|[tde01065](https://github.com/tde01065)|
 
 ## How to use
 The only required field is the datetime you want to show as relative time. It can be eiter in the past or future, and you can use a datetime object, a timestamp (integer or float) or anything which can be converted to a datetime object using `as_datetime`.
