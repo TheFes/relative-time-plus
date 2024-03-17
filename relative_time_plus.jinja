@@ -181,6 +181,7 @@
     {%- set yrs = 0 if 'year' in not_use else yrs -%}
   {#- set other time period variables #}
     {%- set s = (date_max - date_min).total_seconds() + extra_days | default(0) * 86400 -%}
+    {%- set s = s | abs -%}{# avoid negative value (leap year?) #}
     {%- set wks = 0 if 'week' in not_use else (s // w) | int -%}
     {%- set day = 0 if 'day' in not_use else ((s - wks * w) // d) | int -%}
     {%- set hrs = 0 if 'hour' in not_use else ((s - wks * w - day * d) // h) | int -%}
@@ -193,7 +194,7 @@
 {%- endmacro -%}
 
 {# macro to output a timedelta in a readable format #}
-{%- macro relative_time_plus(date, parts=1, abbr=false, verbose=false, language='en', compare_date=now(), month=none, week=none, millisecond=none, not_use=['millisecond'], always_show=[], time=true) -%}
+{%- macro relative_time_plus(date, parts=1, abbr=false, verbose=false, language='en', compare_date=now(), month=none, week=none, millisecond=none, not_use=['millisecond'], always_show=[], time=true, round=false) -%}
   {#- set defaults for input if not entered #}
     {%- set date = date if date is datetime else date | as_datetime -%}
     {%- set compare_date = compare_date if compare_date is datetime else compare_date | as_datetime -%}
@@ -243,6 +244,50 @@
       {#-select itemw to show based on input #}
         {%- set index_first = (time_parts.keys() | list).index(first) -%}
         {%- set items = (time_parts.keys() | list)[index_first:index_first + parts] -%}
+      {# round time_parts if wanted #}
+        {%- set round = round | bool(false) -%}
+        {%- if round -%}
+          {%- set last = items[-1] -%}
+          {%- set time_periods_length = [365,12,5,7,24,60,60,1000] -%}
+          {%- set ns = namespace(
+                t  = 0.0,
+                it = -1,
+                n  = time_parts[last] | float,
+                nb = time_periods | count,
+                tp = time_parts) -%}
+          {%- for i in range(0, ns.nb, 1) -%}
+            {%- set ns.t = ns.t * time_periods_length[i] -%}
+            {%- set k = time_periods[i] -%}
+            {%- if k == last -%}
+              {%- set ns.t = 1.0 -%}
+            {%- elif k in do_use and ns.t > 0 -%}
+              {%- set ns.n = ns.n + ns.tp[k] / ns.t -%}{# ->(1) #}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- for i in range(ns.nb, 0, -1) -%}
+            {%- set k = time_periods[i] -%}
+            {%- if not (k in do_use) -%}
+              {%- continue -%}
+            {%- elif k == last -%}
+              {%- set ns.tp = dict(ns.tp, **{k: ns.n | round | int}) -%}{# (1) tp[k]=round(n) ->(3) #}
+              {%- set ns.t = 0 -%}
+            {%- elif ns.it >= 0 -%}
+              {%- set ns.tp = dict(ns.tp, **{k: ns.tp[k] + 1}) -%}{# (2) ++tp[k] ->(3) #}
+              {%- set ns.it = -1 -%}
+            {%- endif -%}
+            {%- if k == first -%}
+              {%- break -%}
+            {%- elif ns.tp[k] >= time_periods_length[i] and 
+                  time_periods[i - 1] in do_use -%}{# (3) ->(2) +1 for next k (if exist) #}
+              {%- set ns.it = ns.tp[k] - time_periods_length[i] -%}
+              {%- set ns.tp = dict(ns.tp, **{k: ns.it}) -%}{# tp[k]=0 most like if = 24, 60, ... #}
+            {%- elif ns.t > 0 -%}{# after last #}
+              {%- set ns.tp = dict(ns.tp, **{k: 0}) -%}{# tp[k]=0 then useless #}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- set time_parts = ns.tp -%}
+          {%- set to_show = (time_parts.items() | selectattr('1') | map(attribute='0') | list + always_show) | unique | list | default([always_return], true) -%}{# redo #}
+        {%- endif -%}
       {# convert to phrases #}
         {%- set ns = namespace(phrases=[]) -%}
         {%- for i in items if i in to_show or i == first -%}
