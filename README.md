@@ -51,6 +51,7 @@ Other optional fields are:
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
 |`language`|string|`"en"`|`"nl"`|The country code (eg `dk` for Denmark) for the language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
+|`round`|boolean|`false`|`true`|Set to `true` to round the result to the upper value|
 
 Example usage:
 Using a sensor state:
