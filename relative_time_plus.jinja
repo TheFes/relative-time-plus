@@ -164,11 +164,16 @@
     {%- set date_min = [comp_date, date] | min -%}
   {#- set time periods in seconds #}
     {%- set dur = dict(millisecond=1, second=1000, minute=60000, hour=3600000, day=86400000, week=604800000) -%}
-  {#- set numer of years, and set lowest date using this number of years #}
-    {%- set yrs = date_max.year - date_min.year - (1 if date_max.replace(year=date_min.year) < date_min else 0) -%}
-    {%- set date_max = date_max.replace(year=date_max.year - yrs) -%}
+  {# check if it is needed to determine years #}
+    {%- set days = (date_max - date_min).total_seconds() * 1000 // dur.day -%}
+    {%- if days >= 365 -%}
+      {#- set numer of years, and set lowest date using this number of years #}
+        {%- set yrs = date_max.year - date_min.year - (1 if date_max.replace(year=date_min.year) < date_min else 0) -%}
+        {%- set date_max = date_max.replace(year=date_max.year - yrs) -%}
+    {%- endif -%}
   {#- set numer of months, and set lowest date using this number of months #}
-    {%- if 'month' not in not_use -%}
+    {%- set days = (date_max - date_min).total_seconds() * 1000 // dur.day -%}
+    {%- if days >= 28 and 'month' not in not_use -%}
       {%- set mth = (date_max.month - date_min.month - (1 if date_max.day < date_min.day else 0) + 12) % 12 -%}
       {%- set month_new = (((date_max.month - mth) + 12) % 12) | default(12, true) -%}
       {%- set day_max = ((date_max.replace(day=1, month=month_new) + timedelta(days=31)).replace(day=1) - timedelta(days=1)).day -%}
@@ -178,7 +183,7 @@
       {%- set mth = mth + yrs * 12 if 'year' in not_use else mth -%}
     {%- endif -%}
     {%- set date_max = date_max.replace(year=date_max.year + yrs) if 'year' in not_use and 'month' in not_use else date_max -%}
-    {%- set yrs = 0 if 'year' in not_use else yrs -%}
+    {%- set yrs = 0 if yrs is undefined or 'year' in not_use else yrs -%}
   {#- set other time period variables #}
     {%- set ms = (date_max - date_min).total_seconds() * 1000 + extra_days | default(0) * dur.day -%}
     {%- set wks = (ms // dur.week) | int -%}
@@ -187,22 +192,30 @@
     {%- set min = ((ms % dur.hour // dur.minute) + (hrs * dur.hour / dur.minute if 'hour' in not_use else 0)) | int -%}
     {%- set sec = ((ms % dur.minute // dur.second) + (min * dur.minute / dur.second if 'minute' in not_use else 0)) | int -%}
     {%- set mis = ((ms % dur.second) | round + (sec * dur.second if 'second' in not_use else 0)) | int -%}
-  {# output result #}
-    {%- set output = dict(year=yrs, month=mth | default(0), week=wks, day=days, hour=hrs, minute=min, second=sec, millisecond=mis) %}
-    {%- set output = dict(output.items() | rejectattr('0', 'in', (not_use | reject('eq', 'millisecond') | list))) -%}
   {# apply round if needed #}
     {%- if round_mode in ['common', 'ceil'] -%}
-      {%- set keys, dur_keys = output.keys() | list, dur.keys() | list -%}
-      {%- set first = output.items() | rejectattr('1', 'eq', 0) | map(attribute='0') | first | default('millisecond') -%}
-      {%- set last_index = keys.index(first) + parts - 1 -%}
-      {%- set last = keys[last_index] | default(none) -%}
-      {%- set remain = ms % dur[last] if last else 0 -%}
-      {%- set round_needed = (round_mode == 'ceil' and remain) or (round_mode == 'common' and (remain / dur[last]) | round == 1) -%}
-      {# add 1 to last time part if round is needed #}
-        {%- set output = dict(output, **{last: output[last] + 1} if round_needed else output) -%}
-      {# remove time parts after the last one needed for the output #}
-        {%- set output = dict((output.items() | rejectattr('0', 'in', not_use) | list)[:last_index+1]) -%}
+      {# create output mapping #}
+        {%- set output = dict(year=yrs, month=mth | default(0), week=wks, day=days, hour=hrs, minute=min, second=sec, millisecond=mis) %}
+        {%- set output = dict(output.items() | rejectattr('0', 'in', (not_use | reject('eq', 'millisecond') | list))) -%}
+      {# create lists with keys #}
+        {%- set keys, dur_keys = output.keys() | list, dur.keys() | list -%}
+      {# determine first and last item with data #}
+        {%- set first = output.items() | rejectattr('1', 'eq', 0) | map(attribute='0') | first | default('millisecond') -%}
+        {%- set last_index = keys.index(first) + parts - 1 -%}
+        {%- set last = keys[last_index] | default(none) -%}
+      {# create new output based on rounded ms #}
+        {%- if last and last in dur -%}
+          {%- set ms = (ms / dur[last]) | round(0, round_mode) * dur[last] -%}
+          {%- set wks = (ms // dur.week) | int -%}
+          {%- set days = ((ms % dur.week // dur.day) + (wks * dur.week / dur.day if 'week' in not_use else 0)) | int -%}
+          {%- set hrs = ((ms % dur.day // dur.hour) + (days * dur.day / dur.hour if 'day' in not_use else 0)) | int -%}
+          {%- set min = ((ms % dur.hour // dur.minute) + (hrs * dur.hour / dur.minute if 'hour' in not_use else 0)) | int -%}
+          {%- set sec = ((ms % dur.minute // dur.second) + (min * dur.minute / dur.second if 'minute' in not_use else 0)) | int -%}
+          {%- set mis = ((ms % dur.second) | round + (sec * dur.second if 'second' in not_use else 0)) | int -%}
+        {%- endif -%}
     {%- endif -%}
+  {# output result #}
+    {%- set output = dict(year=yrs, month=mth | default(0), week=wks, day=days, hour=hrs, minute=min, second=sec, millisecond=mis) %}
     {{- dict(output.items() | rejectattr('0', 'in', not_use)) | to_json -}}
 {%- endmacro -%}
 
