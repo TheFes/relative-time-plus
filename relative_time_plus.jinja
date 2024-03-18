@@ -155,7 +155,7 @@
   macro to split a timedelta in years, months, weeks, days, hours, minutes, seconds
   used by the relative time plus macro, set up as a seperate macro so it can be reused
 #}
-{%- macro time_split(date, compare_date=now(), time=true, not_use=[]) -%}
+{%- macro time_split(date, compare_date=now(), time=true, not_use=[], round_mode='floor', parts=8) -%}
   {# set defaults for variables #}
     {%- set date = date | as_local if time else date.date()-%}
     {%- set time = time | bool(true) -%}
@@ -163,7 +163,7 @@
     {%- set date_max = [comp_date, date] | max -%}
     {%- set date_min = [comp_date, date] | min -%}
   {#- set time periods in seconds #}
-    {%- set m, h, d, w = 60, 3600, 86400, 604800 -%}
+    {%- set dur = dict(millisecond=1, second=1000, minute=60000, hour=3600000, day=86400000, week=604800000) -%}
   {#- set numer of years, and set lowest date using this number of years #}
     {%- set yrs = date_max.year - date_min.year - (1 if date_max.replace(year=date_min.year) < date_min else 0) -%}
     {%- set date_max = date_max.replace(year=date_max.year - yrs) -%}
@@ -180,20 +180,34 @@
     {%- set date_max = date_max.replace(year=date_max.year + yrs) if 'year' in not_use and 'month' in not_use else date_max -%}
     {%- set yrs = 0 if 'year' in not_use else yrs -%}
   {#- set other time period variables #}
-    {%- set s = (date_max - date_min).total_seconds() + extra_days | default(0) * 86400 -%}
-    {%- set wks = 0 if 'week' in not_use else (s // w) | int -%}
-    {%- set day = 0 if 'day' in not_use else ((s - wks * w) // d) | int -%}
-    {%- set hrs = 0 if 'hour' in not_use else ((s - wks * w - day * d) // h) | int -%}
-    {%- set min = 0 if 'minute' in not_use else ((s - wks * w - day * d - hrs * h) // m) | int -%}
-    {%- set sec = 0 if 'second' in not_use else (s - wks * w - day * d - hrs * h - min * m) | int -%}
-    {%- set ms = (s % 1 * 1000) | round | int -%}
+    {%- set ms = (date_max - date_min).total_seconds() * 1000 + extra_days | default(0) * dur.day -%}
+    {%- set wks = (ms // dur.week) | int -%}
+    {%- set days = ((ms % dur.week // dur.day) + (wks * dur.week / dur.day if 'week' in not_use else 0)) | int -%}
+    {%- set hrs = ((ms % dur.day // dur.hour) + (days * dur.day / dur.hour if 'day' in not_use else 0)) | int -%}
+    {%- set min = ((ms % dur.hour // dur.minute) + (hrs * dur.hour / dur.minute if 'hour' in not_use else 0)) | int -%}
+    {%- set sec = ((ms % dur.minute // dur.second) + (min * dur.minute / dur.second if 'minute' in not_use else 0)) | int -%}
+    {%- set mis = ((ms % dur.second) | round + (sec * dur.second if 'second' in not_use else 0)) | int -%}
   {# output result #}
-    {%- set output = dict(year=yrs, month=mth | default(0), week=wks, day=day, hour=hrs, minute=min, second=sec, millisecond=ms) %}
+    {%- set output = dict(year=yrs, month=mth | default(0), week=wks, day=days, hour=hrs, minute=min, second=sec, millisecond=mis) %}
+    {%- set output = dict(output.items() | rejectattr('0', 'in', (not_use | reject('eq', 'millisecond') | list))) -%}
+  {# apply round if needed #}
+    {%- if round_mode in ['common', 'ceil'] -%}
+      {%- set keys, dur_keys = output.keys() | list, dur.keys() | list -%}
+      {%- set first = output.items() | rejectattr('1', 'eq', 0) | map(attribute='0') | first | default('millisecond') -%}
+      {%- set last_index = keys.index(first) + parts - 1 -%}
+      {%- set last = keys[last_index] | default(none) -%}
+      {%- set remain = ms % dur[last] if last else 0 -%}
+      {%- set round_needed = (round_mode == 'ceil' and remain) or (round_mode == 'common' and (remain / dur[last]) | round == 1) -%}
+      {# add 1 to last time part if round is needed #}
+        {%- set output = dict(output, **{last: output[last] + 1} if round_needed else output) -%}
+      {# remove time parts after the last one needed for the output #}
+        {%- set output = dict((output.items() | rejectattr('0', 'in', not_use) | list)[:last_index+1]) -%}
+    {%- endif -%}
     {{- dict(output.items() | rejectattr('0', 'in', not_use)) | to_json -}}
 {%- endmacro -%}
 
 {# macro to output a timedelta in a readable format #}
-{%- macro relative_time_plus(date, parts=1, abbr=false, verbose=false, language='en', compare_date=now(), month=none, week=none, millisecond=none, not_use=['millisecond'], always_show=[], time=true) -%}
+{%- macro relative_time_plus(date, parts=1, abbr=false, verbose=false, language='en', compare_date=now(), month=none, week=none, millisecond=none, not_use=['millisecond'], always_show=[], time=true, round_mode=false) -%}
   {#- set defaults for input if not entered #}
     {%- set date = date if date is datetime else date | as_datetime -%}
     {%- set compare_date = compare_date if compare_date is datetime else compare_date | as_datetime -%}
@@ -222,7 +236,7 @@
       {%- set time = time | bool(true) -%}
       {%- set abbr = abbr | bool(false) or verbose | bool(false) -%}
     {# split timedelta #}
-      {%- set time_parts = time_split(date, compare_date, time, not_use) | from_json -%}
+      {%- set time_parts = time_split(date, compare_date, time, not_use, round_mode, parts) | from_json -%}
     {#- find first non zero time period #}
       {%- set time_periods = ['year', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond'] -%}
       {%- set do_use = time_periods | reject('in', not_use) | list -%}
