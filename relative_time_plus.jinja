@@ -228,7 +228,7 @@
         {{- dict(year=yrs + add_yrs) | to_json -}}
       {%- else -%}
       {# check if it is needed to determine months #}    
-        {%- if ms >= dur.day * 28 and 'month' not in not_use -%}
+        {%- if ms >= dur.day * 28 and 'month' in do_use -%}
         {#- set numer of months, and set highest date using this number of months #}
           {%- set ns = namespace(dm=date_max, mth=0) -%}
           {%- for m in range(1, 12) -%}
@@ -272,11 +272,12 @@
           {%- set mis = ((ms % dur.second) | round + (sec * dur.second if 'second' in not_use else 0)) | int -%}
         {# prepare dict with ouput #}
           {%- set output = dict(year=yrs, month=mth | default(0), week=wks, day=days, hour=hrs, minute=min, second=sec, millisecond=mis) -%}
+          {%- set output = dict(output.items() | selectattr('0', 'in', do_use)) -%}
           {%- set keys = output.keys() | list -%}
           {%- set with_value = output.items() | rejectattr('1', 'eq', 0) | map(attribute='0') | list -%}
           {%- set first = with_value | first | default('millisecond') -%}
           {%- set first = keys | select('in', always_show | default([], true) + [first]) | first -%}
-          {%- set to_use = (keys | reject('in', not_use) | list)[keys.index(first):] -%}
+          {%- set to_use = keys[keys.index(first):] -%}
         {# 4: check if there is anything left to use #}
           {%- if to_use -%}
             {%- set to_output = to_use[:parts] -%}
