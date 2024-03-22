@@ -46,11 +46,12 @@ Other optional fields are:
 |---|---|---|---|---|
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
 |`not_use`|list or string|`['millisecond']`|`['yr', 'minute']`|Provide the time periods you don't want to use in the output, by default only milliseconds are excluded. You can provide a list or a comma separated string, so `'yr, month'` and `['yr', 'monhth']` will both work. Possible values are `year`, `month`, `week`, `day`, `hour`, `minute`, `second`, `millisecond` or the abbreviated versions `yr`, `mth`, `wk`, `day`, `hr`, `min`, `sec`, `ms`.|
-|`always_show`|list or string|`[]`|`['yr', 'mth', 'day']`|Provide the time periods you always want to show, even when they are zero. With the example the output could be `"0 years, 0 months and 19 days"`|
+|`always_show`|list or string|`[]`|`['yr', 'mth', 'day']`|Provide the time periods you always want to show, even when they are zero. With the example the output could be `"0 years, 0 months and 19 days"`. Use `'all'` to always show all time parts. You can use `not_use` to exclude time parts from `'all'`|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
 |`language`|string|`"en"`|`"nl"`|The country code (eg `dk` for Denmark) for the language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
+|`round_mode`|string|`"floor"`|`"commmon"`|Determines how the last outputted value should be rounded. `"common"` will round up if the remainder is half or more, `"ceil"` will always round up if there is a remaining part, `"floor"` not take the remaining part into account|
 
 Example usage:
 Using a sensor state:
