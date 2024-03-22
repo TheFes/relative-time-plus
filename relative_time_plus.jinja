@@ -222,6 +222,7 @@
           {%- set yrs = date_max.year - date_min.year - (1 if date_max.replace(year=date_min.year) < date_min else 0) -%}
           {%- set date_max = date_max.replace(year=date_max.year - yrs) -%}
           {%- set ms = (date_max - date_min).total_seconds() * 1000 -%}
+          {%- set ms_yrs = ms -%}
       {%- endif -%}
       {%- set yrs = yrs | default(0) -%}
       {# check if it is needed to determine months #}    
@@ -286,10 +287,11 @@
           {# apply round if needed #}
             {%- if round_mode in ['common', 'ceil'] and last != 'millisecond' -%}
               {# determine first and last item with data #}
+                {%- set ms = ms_yrs if last == 'year' else ms -%}
                 {%- set remain = ms % dur[last] -%}
-                {%- set remain_part = remain / dur[last] + 1 -%}
+                {%- set remain_part = remain / dur[last] -%}
                 {%- set to_round = 1 if remain_part >= 0.5 and round_mode == 'common' else remain_part | round(0, round_mode) -%}
-                {%- set sec_to_add = ((dur[last] + 1 - remain) | round(0, 'ceil') * to_round) / 1000 -%}
+                {%- set sec_to_add = ((dur[last] + (dur.day if last in  ['year', 'month'] else 1) - remain) | round(0, 'ceil') * to_round) / 1000 -%}
                 {%- set round_mode = 'floor' -%}
                 {%- set date_max = [compare_date, date] | max + timedelta(seconds=sec_to_add) -%}
                 {%- set date_min = [compare_date, date] | min -%}
