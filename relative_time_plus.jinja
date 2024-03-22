@@ -296,10 +296,11 @@
               {# determine first and last item with data #}
                 {%- set last = to_output | last -%}
                 {%- set remain = ms % dur[last] -%}
-                {%- set to_round = (remain /dur[last]) | round(0, round_mode) -%}
-                {%- set to_add = (dur[last] - remain + 1) | round(0, 'ceil') * to_round -%}
+                {%- set remain_part = remain / dur[last] -%}
+                {%- set to_round = 1 if remain_part >= 0.5 and round_mode == 'common' else remain_part | round(0, round_mode) -%}
+                {%- set sec_to_add = ((dur[last] + 1 - remain) | round(0, 'ceil') * to_round) / 1000 -%}
                 {%- set round_mode = 'floor' -%}
-                {%- set date_max = [compare_date, date] | max + timedelta(seconds=to_add/1000) -%}
+                {%- set date_max = [compare_date, date] | max + timedelta(seconds=sec_to_add) -%}
                 {%- set date_min = [compare_date, date] | min -%}
                 {%- set output = time_split(date_max, parts, date_min, not_use, always_show, time, round_mode) | from_json -%}
             {%- endif -%}
