@@ -278,6 +278,8 @@
           {%- set first = with_value | first | default('millisecond') -%}
           {%- set first = keys | select('in', always_show | default([], true) + [first]) | first -%}
           {%- set to_use = keys[keys.index(first):] -%}
+          {%- set to_output = to_use[:parts] %}
+          {%- set last = to_output | last  |default('millisecond') -%}
         {# 4: check if there is anything left to use #}
           {%- if to_use -%}
             {%- set to_output = to_use[:parts] -%}
@@ -290,11 +292,11 @@
               {%- set to_output = to_output | reject('in', not_use) | list  + always_show -%}
               {%- set to_output = keys | select('in', to_output) | list -%}
               {%- set output = time_split(date, parts, compare_date, not_use, always_show, time, round_mode) | from_json -%}
+
             {%- endif -%}
           {# apply round if needed #}
-            {%- if round_mode in ['common', 'ceil'] and to_use | count > to_output | count -%}
+            {%- if round_mode in ['common', 'ceil'] and last != 'millisecond' -%}
               {# determine first and last item with data #}
-                {%- set last = to_output | last -%}
                 {%- set remain = ms % dur[last] -%}
                 {%- set remain_part = remain / dur[last] -%}
                 {%- set to_round = 1 if remain_part >= 0.5 and round_mode == 'common' else remain_part | round(0, round_mode) -%}
