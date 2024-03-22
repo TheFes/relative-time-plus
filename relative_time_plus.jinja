@@ -171,10 +171,25 @@
   used by the relative time plus macro, set up as a seperate macro so it can be reused
 #}
 {%- macro time_split(date, parts=8, compare_date=now(), not_use=[], always_show=['all'], time=true, round_mode='floor') -%}
+  {#- set defaults for input if not entered #}
+    {%- set date = date if date is datetime else date | as_datetime('invalid') -%}
+    {%- set compare_date = compare_date if compare_date is datetime else compare_date | as_datetime('invalid') -%}
+    {%- set time = time | bool(true) -%}
+    {%- set parts = [parts | int(1), always_show | count] | max -%}
+  {# 1: check if date input is correct #}
+    {%- if date is datetime and compare_date is datetime -%}
+    {# convert date input to local or date only #}
+      {%- set date = date | as_local if time else (date | as_local).date() -%}
+      {%- set compare_date = compare_date | as_local if time else (compare_date | as_local).date() -%}
+    {# determine highest and lowest date #}
+      {%- set date_max = [compare_date, date] | max -%}
+      {%- set date_min = [compare_date, date] | min -%}
     {#- set time periods in seconds #}
+      {%- set days_year = 365 + (1 if (compare_date.replace(month=3, day=1) - timedelta(days=1)).day == 29 else 0) -%}
+      {%- set days_month = ((compare_date.replace(day=20) + timedelta(days=20)).replace(day=1) - timedelta(days=1)).day -%}
       {%- set dur = dict(
-                           year=none,
-                           month=none,
+                           year=days_year * 86400000,
+                           month=days_month * 86400000,
                            week=604800000,
                            day=86400000,
                            hour=3600000,
@@ -195,23 +210,11 @@
       {%- endif -%}
       {%- set always_show = always_show | reject('in', not_use) | list -%}
       {%- set do_use = dur.keys() | reject('in', not_use) | list -%}
-  {#- set defaults for input if not entered #}
-    {%- set date = date if date is datetime else date | as_datetime('invalid') -%}
-    {%- set compare_date = compare_date if compare_date is datetime else compare_date | as_datetime('invalid') -%}
-    {%- set time = time | bool(true) -%}
-    {%- set parts = [parts | int(1), always_show | count] | max -%}
-  {# 1: check if date input is correct #}
-    {%- if date is datetime and compare_date is datetime -%}
-    {# convert date input to local or date only #}
-      {%- set date = date | as_local if time else (date | as_local).date() -%}
-      {%- set compare_date = compare_date | as_local if time else (compare_date | as_local).date() -%}
-    {# determine highest and lowest date #}
-      {%- set date_max = [compare_date, date] | max -%}
-      {%- set date_min = [compare_date, date] | min -%}
     {# determine number of milliseconds #}
       {%- set ms = ((date_max - date_min).total_seconds() * 1000) | round(0, 'ceil')-%}
+    {# 2: Check if the number of milliseconds is more then the duration of the last time part to output #}
       {%- if do_use and ms < dur[do_use|last] -%}
-        {{ {do_use | last: (ms / dur[do_use|last]) | round(0, round_mode)} | to_json }}
+        {{- {do_use | last: (ms / dur[do_use|last]) | round(0, round_mode)} | to_json -}}
       {%- else -%}
     {# check if it is needed to determine years #}    
       {%- if ms >= dur.day * 365 -%}
@@ -221,14 +224,12 @@
           {%- set ms = (date_max - date_min).total_seconds() * 1000 -%}
       {%- endif -%}
       {%- set yrs = yrs | default(0) -%}
-    {# 2: round years and stop further processing if needed #}
-      {%- if do_use == ['year'] or (parts == 1 and (yrs > 0 or 'year' in always_show) and yrs not in not_use and (not always_show or 'year' in always_show)) -%}
-        {%- set days_year = 365 + (1 if (compare_date.replace(month=3, day=1) - timedelta(days=1)).day == 29 else 0) -%}
-        {%- set add_yrs = (ms / (dur.day * days_year)) | round(0, round_mode) -%}
-        {{- dict(year=yrs + add_yrs) | to_json -}}
-      {%- else -%}
       {# check if it is needed to determine months #}    
-        {%- if ms >= dur.day * 28 and 'month' in do_use -%}
+        {%- set check_mth =
+          ms >= dur.day * 28
+          and 'month' in do_use
+        -%}
+        {%- if check_mth -%}
         {#- set numer of months, and set highest date using this number of months #}
           {%- set ns = namespace(dm=date_max, mth=0) -%}
           {%- for m in range(1, 12) -%}
@@ -249,17 +250,6 @@
           {%- set ms = (date_max - date_min).total_seconds() * 1000 -%}
         {%- endif -%}
         {%- set mth = mth | default(0) -%}
-      {# 3: round months and stop further processing if needed #}
-        {%- if do_use == ['month'] or (('month' in always_show or mth > 0) and parts == 1  + (1 if 'year' in always_show or yrs > 0 else 0) and 'month' not in not_use and (always_show in [[], ['year']] or 'month' in always_show)) -%}
-          {%- set days_month = ((compare_date.replace(day=20) + timedelta(days=20)).replace(day=1) - timedelta(days=1)).day -%}
-          {%- set mth = mth + (ms / (dur.day * days_month)) | round(0, round_mode) -%}
-          {%- if mth == 12 and not 'year' in not_use -%}
-            {%- set yrs, mth = yrs + 1, 0 -%}
-          {%- endif -%}
-          {%- set dict_yr = dict(year=yrs) if parts == 2 else {} -%}
-          {%- set mth_dict = dict(month=mth) if mth > 0 or 'month' in always_show or (parts == 1 and yrs == 0) else dict() -%}
-          {{- dict(dict_yr, **mth_dict) | to_json -}}
-        {%- else -%}
         {# prepare for other time parts #}
           {%- set date_max = date_max.replace(year=date_max.year + yrs) if 'year' in not_use and 'month' in not_use else date_max -%}
         {#- set other time period variables #}
@@ -278,9 +268,9 @@
           {%- set first = with_value | first | default('millisecond') -%}
           {%- set first = keys | select('in', always_show | default([], true) + [first]) | first -%}
           {%- set to_use = keys[keys.index(first):] -%}
-          {%- set to_output = to_use[:parts] %}
+          {%- set to_output = to_use[:parts] -%}
           {%- set last = to_output | last  |default('millisecond') -%}
-        {# 4: check if there is anything left to use #}
+        {# 3: check if there is anything left to use #}
           {%- if to_use -%}
             {%- set to_output = to_use[:parts] -%}
             {%- set always_return = to_output | last -%}
@@ -292,13 +282,12 @@
               {%- set to_output = to_output | reject('in', not_use) | list  + always_show -%}
               {%- set to_output = keys | select('in', to_output) | list -%}
               {%- set output = time_split(date, parts, compare_date, not_use, always_show, time, round_mode) | from_json -%}
-
             {%- endif -%}
           {# apply round if needed #}
             {%- if round_mode in ['common', 'ceil'] and last != 'millisecond' -%}
               {# determine first and last item with data #}
                 {%- set remain = ms % dur[last] -%}
-                {%- set remain_part = remain / dur[last] -%}
+                {%- set remain_part = remain / dur[last] + 1 -%}
                 {%- set to_round = 1 if remain_part >= 0.5 and round_mode == 'common' else remain_part | round(0, round_mode) -%}
                 {%- set sec_to_add = ((dur[last] + 1 - remain) | round(0, 'ceil') * to_round) / 1000 -%}
                 {%- set round_mode = 'floor' -%}
@@ -311,9 +300,7 @@
             {%- set reject_list = zero_values | reject('in', always_show) | list -%}
             {{- dict(output.items() | selectattr('0', 'in', to_output) | rejectattr('0', 'in', reject_list)) | default({always_retrun: 0}, true) | to_json -}}
           {%- else -%} {{- dict(error='No time parts left to output') | to_json -}}
-          {%- endif -%} {# 4 #}
-        {%- endif -%} {# 3 #}
-      {%- endif -%}
+          {%- endif -%} {# 3 #}
       {%- endif -%} {# 2 #}
     {%- else -%} {{- dict(error='Invalid date input') | to_json -}}
     {%- endif -%} {# 1 #}
