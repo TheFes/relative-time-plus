@@ -34,6 +34,8 @@ Current supported languages:
 |French|`fr`|[Pulpyyyy](https://github.com/Pulpyyyy)|
 |German|`de`|[fastlane086](https://github.com/fastlane086)|
 |Italian|`it`|[SiriosDev](https://github.com/SiriosDev)|
+|Norwegian (bokmål)|`nb`|[bendikrb](https://github.com/bendikrb)|
+|Norwegian (nynorsk)|`nn`|[bendikrb](https://github.com/bendikrb)|
 |Polish|`pl`|[darylosu](https://github.com/darylosu)|
 |Portuguese|`pt`|[FragMenthor](https://github.com/FragMenthor)|
 |Swedish|`sv`|[tde01065](https://github.com/tde01065)|
