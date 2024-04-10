@@ -49,7 +49,7 @@ Other optional fields are:
 |name|type|default|example|description|
 |---|---|---|---|---|
 |`parts`|integer|`1`|`3`|The number of time fractions which should be used|
-|`not_use`|list or string|`['millisecond']`|`['yr', 'minute']`|Provide the time periods you don't want to use in the output, by default only milliseconds are excluded. You can provide a list or a comma separated string, so `'yr, month'` and `['yr', 'monhth']` will both work. Possible values are `year`, `month`, `week`, `day`, `hour`, `minute`, `second`, `millisecond` or the abbreviated versions `yr`, `mth`, `wk`, `day`, `hr`, `min`, `sec`, `ms`.|
+|`not_use`|list or string|`['millisecond']`|`['yr', 'minute']`|Provide the time periods you don't want to use in the output, by default only milliseconds are excluded. You can provide a list or a comma separated string, so `'yr, month'` and `['yr', 'month']` will both work. Possible values are `year`, `month`, `week`, `day`, `hour`, `minute`, `second`, `millisecond` or the abbreviated versions `yr`, `mth`, `wk`, `day`, `hr`, `min`, `sec`, `ms`.|
 |`always_show`|list or string|`[]`|`['yr', 'mth', 'day']`|Provide the time periods you always want to show, even when they are zero. With the example the output could be `"0 years, 0 months and 19 days"`. Use `'all'` to always show all time parts. You can use `not_use` to exclude time parts from `'all'`|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
