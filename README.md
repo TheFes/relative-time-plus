@@ -32,6 +32,7 @@ Current supported languages:
 |Danish|`dk`|[C4-Dimitri](https://github.com/C4-Dimitri)|
 |Dutch|`nl`|[TheFes](https://github.com/TheFes)|
 |English|`en`|[TheFes](https://github.com/TheFes)|
+|Finish|`fi`|[samhaa](https://github.com/samhaa)|
 |French|`fr`|[Pulpyyyy](https://github.com/Pulpyyyy)|
 |German|`de`|[fastlane086](https://github.com/fastlane086)|
 |Italian|`it`|[SiriosDev](https://github.com/SiriosDev)|
