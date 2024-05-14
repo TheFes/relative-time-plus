@@ -40,6 +40,7 @@ Current supported languages:
 |Norwegian (nynorsk)|`nn`|[bendikrb](https://github.com/bendikrb)|
 |Polish|`pl`|[darylosu](https://github.com/darylosu)|
 |Portuguese|`pt`|[FragMenthor](https://github.com/FragMenthor)|
+|Russian|`ru`|[wrun](https://github.com/wrun)|
 |Swedish|`sv`|[tde01065](https://github.com/tde01065)|
 
 ## How to use
