@@ -44,6 +44,7 @@ Current supported languages:
 |Russian|`ru`|[wrun](https://github.com/wrun)|
 |Swedish|`sv`|[tde01065](https://github.com/tde01065)|
 |Ukranian|`uk`|[laktiv](https://github.com/laktiv)|
+|Vietnamese|`vi`|[cuongpl](https://github.com/cuongpl)|
 
 ## How to use
 The only required field is the datetime you want to show as relative time. It can be eiter in the past or future, and you can use a datetime object, a timestamp (integer or float) or anything which can be converted to a datetime object using `as_datetime`.
