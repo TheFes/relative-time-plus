@@ -452,7 +452,7 @@
     {%- endif -%} {# 1 #}
 {%- endmacro -%}
 
-{# macro to output a timedelta in a readable format #}
+{# macro for determining the time unit variant depending on the language #}
 {%- macro plural(number=0, rule='english') -%}
   {%- set mod100 = number % 100 -%}
   {%- set mod10 = number % 10 -%}
