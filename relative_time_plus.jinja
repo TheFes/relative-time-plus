@@ -19,7 +19,7 @@
 {%- set _time_period_phrases = [
   {
     'language': 'en',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['yr', 'year', 'years'],
       'month': ['mth', 'month', 'months'],
@@ -35,7 +35,7 @@
   },
   {
     'language': 'pl',
-    'pluralForm': 'polish',
+    'plural_form': 'polish',
     'phrases': {
       'year': ['r', 'rok', 'lata', 'lat'],
       'month': ['msc', 'miesiąc', 'miesiące', 'miesięcy'],
@@ -51,7 +51,7 @@
   },
   {
     'language': 'fr',
-    'pluralForm': 'french',
+    'plural_form': 'french',
     'phrases': {
       'year': ['an', 'année', 'années'],
       'month': ['mois', 'mois', 'mois'],
@@ -67,7 +67,7 @@
   },
   {
     'language': 'it',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['aa', 'anno', 'anni'],
       'month': ['mm', 'mese', 'mesi'],
@@ -83,7 +83,7 @@
   },
   {
     'language': 'nb',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['år', 'år', 'år'],
       'month': ['mnd', 'måned', 'måneder'],
@@ -99,7 +99,7 @@
   },
   {
     'language': 'nl',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['jr', 'jaar', 'jaar'],
       'month': ['mnd', 'maand', 'maanden'],
@@ -115,7 +115,7 @@
   },
   {
     'language': 'nn',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['år', 'år', 'år'],
       'month': ['mnd', 'månad', 'månader'],
@@ -131,7 +131,7 @@
   },
   {
     'language': 'de',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['J.', 'Jahr', 'Jahre'],
       'month': ['M.', 'Monat', 'Monate'],
@@ -147,7 +147,7 @@
   },
   {
     'language': 'pt',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['aa', 'ano', 'anos'],
       'month': ['mm', 'mês', 'meses'],
@@ -163,7 +163,7 @@
   },
   {
     'language': 'dk',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['år', 'år', 'år'],
       'month': ['mnd', 'måned', 'måneder'],
@@ -179,7 +179,7 @@
   },
   {
     'language': 'sv',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['år', 'år', 'år'],
       'month': ['mån', 'månad', 'månader'],
@@ -195,7 +195,7 @@
   },
   {
     'language': 'cs',
-    'pluralForm': 'slovak',
+    'plural_form': 'slovak',
     'phrases': {
       'year': ['rok', 'rok', 'roky', 'let'],
       'month': ['měs', 'měsíc', 'měsíce', 'měsíců'],
@@ -211,7 +211,7 @@
   },
   {
     'language': 'fi',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['v', 'vuosi', 'vuotta'],
       'month': ['kk', 'kuukausi', 'kuukautta'],
@@ -227,7 +227,7 @@
   },
   {
     'language': 'ru',
-    'pluralForm': 'russian',
+    'plural_form': 'russian',
     'phrases': {
       'year': ['г', 'год', 'года', 'лет'],
       'month': ['м', 'месяц', 'месяца', 'месяцев'],
@@ -243,7 +243,7 @@
   },
   {
     'language': 'uk',
-    'pluralForm': 'russian',
+    'plural_form': 'russian',
     'phrases': {
       'year': ['р', 'рік', 'роки', 'років'],
       'month': ['м', 'місяць', 'місяці', 'місяців'],
@@ -251,7 +251,7 @@
       'day': ['дн', 'день', 'дні', 'днів'],
       'hour': ['год', 'година', 'години', 'годин'],
       'minute': ['хв', 'хвилина', 'хвилини', 'хвилин'],
-      'second': ['сек', 'секунд', 'секунди', 'секунд'],
+      'second': ['сек', 'секунда', 'секунди', 'секунд'],
       'millisecond': ['мсек', 'мілісекунда', 'мілісекунди', 'мілісекунд'],
       'combine': 'та',
       'error': 'Недійсна дата',
@@ -259,7 +259,7 @@
   },
   {
     'language': 'bg',
-    'pluralForm': 'english',
+    'plural_form': 'english',
     'phrases': {
       'year': ['г', 'година', 'години'],
       'month': ['м', 'месец', 'месеца'],
@@ -275,7 +275,7 @@
   },
   {
     'language': 'vi',
-    'pluralForm': 'asian',
+    'plural_form': 'asian',
     'phrases': {
       'year': ['y', 'năm'],
       'month': ['m', 'tháng'],
@@ -490,7 +490,7 @@
     {%- set languages = phrases | map(attribute='language') | list -%}
     {%- set language = iif(language in languages, language, 'en') -%}
     {%- set phr = phrases | selectattr('language', 'eq', language) | map(attribute='phrases') | list | first -%}
-    {%- set pluralForm = phrases | selectattr('language', 'eq', language) | map(attribute='pluralForm') | list | first -%}
+    {%- set plural_form = phrases | selectattr('language', 'eq', language) | map(attribute='plural_form') | list | first -%}
     {%- set abbr = abbr | bool(false) -%}
   {# split timedelta #}
     {%- set time_parts = time_split(date, parts, compare_date, not_use, always_show, time, round_mode) | from_json -%}
@@ -501,8 +501,8 @@
     {# convert to phrases #}
       {%- set ns = namespace(phrases=[]) -%}
       {%- for i in time_parts.keys()  -%}
-        {%- set pluralVariant = plural(time_parts[i], pluralForm) | int -%}
-        {%- set phr_form = phr[i][0] if abbr else phr[i][pluralVariant] -%}
+        {%- set plural_variant = plural(time_parts[i], plural_form) | int -%}
+        {%- set phr_form = phr[i][0] if abbr else phr[i][plural_variant] -%}
         {%- set phrase = '{} {}'.format(time_parts[i], phr_form) -%}
         {%- set ns.phrases = ns.phrases + [phrase] -%}
       {%- endfor -%}
