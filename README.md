@@ -42,6 +42,7 @@ Current supported languages:
 |Polish|`pl`|[darylosu](https://github.com/darylosu)|
 |Portuguese|`pt`|[FragMenthor](https://github.com/FragMenthor)|
 |Russian|`ru`|[wrun](https://github.com/wrun)|
+|Spanish|`es`|[cvc90](https://github.com/cvc90)|
 |Swedish|`sv`|[tde01065](https://github.com/tde01065)|
 |Ukranian|`uk`|[laktiv](https://github.com/laktiv)|
 |Vietnamese|`vi`|[cuongpl](https://github.com/cuongpl)|
