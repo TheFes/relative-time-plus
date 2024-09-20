@@ -12,10 +12,9 @@ A jinja macro to display the difference between two datetimes in a readable form
 I hear you thinking, there is already a `relative_time` filter/function in Home Assistant. And of course this is true, but it only returns the text in English, and always only returns the biggest time fraction. So this macro supports multiple languages (currently Dutch and English) and has some additional options.
 
 ## How to install
-You need to have Home Assistant 2023.4 or higher installed to use custom templates.
-As of version 1.0 Home Assistant 2023.11 is required because it uses tests introduced in that version.
+Home Assistant 2023.11 or higher is required to use this macro.
 
-This custom template is compatible with [HACS](https://hacs.xyz/), which means that you can easily download and manage updates for it. Custom templates are currently only available in HACS when you enable experimental features. Make sure to enable it in the HACS settings, which you can access from Settings > [Devices & Services](https://my.home-assistant.io/create-link/?redirect=integrations) > HACS When experimental features are enabled you click the button below to add it to your HACS installation
+This custom template is compatible with [HACS](https://hacs.xyz/), which means that you can easily download and manage updates for it. Custom templates are supported in HACS 2.0 or when you enable experimental features in the HACS settings of versions prior to 2.0. 
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=TheFes&repository=relative-time-plus&category=template)
 
