@@ -35,6 +35,8 @@ Current supported languages:
 |Finish|`fi`|[samhaa](https://github.com/samhaa)|
 |French|`fr`|[Pulpyyyy](https://github.com/Pulpyyyy)|
 |German|`de`|[fastlane086](https://github.com/fastlane086)|
+|Hebrew|`he`|[Ofir Manor](https://github.com/ofirmanor)|
+|Hungarian|`hu`|[terba](https://github.com/terba)|
 |Italian|`it`|[SiriosDev](https://github.com/SiriosDev)|
 |Norwegian (bokmål)|`nb`|[bendikrb](https://github.com/bendikrb)|
 |Norwegian (nynorsk)|`nn`|[bendikrb](https://github.com/bendikrb)|
