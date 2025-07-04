@@ -50,6 +50,10 @@ Current supported languages:
 
 ## How to use
 The only required field is the datetime you want to show as relative time. It can be eiter in the past or future, and you can use a datetime object, a timestamp (integer or float) or anything which can be converted to a datetime object using `as_datetime`.
+
+You can also directly use an entity_id as input. The macro will retreive the state of the sensor automatically, and will also check if it is a sensor with `state_class: duration`. If that is the case, it will treat the input as duration instead of as a timestamp.
+In case an input_datetime entity is used, and this input_datetime is set to time only, the macro will convert it to that time today.
+
 Other optional fields are:
 
 |name|type|default|example|description|
@@ -62,6 +66,8 @@ Other optional fields are:
 |`language`|string|`"en"`|`"nl"`|The country code (eg `dk` for Denmark) for the language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
 |`round_mode`|string|`"floor"`|`"commmon"`|Determines how the last outputted value should be rounded. `"common"` will round up if the remainder is half or more, `"ceil"` will always round up if there is a remaining part, `"floor"` not take the remaining part into account|
+|`duration`|boolean|`false`|`true`|Set to `true` in case the input a duration (e.g 1235 seconds) instead of a datetime or timestamp. In case the input is a sensor with `state_class: duration` it will be derived from the sensor automatically
+|`duration_unit`|string|`"s"`|`"h"`|The unit of measurement in case the input is a duration. Can be "d", "h", "min", "ms", "s", or "μs". In case the input is sensor with `state_class: duration` it will be derived from the sensor automatically
 
 Example usage:
 Using a sensor state:
@@ -99,6 +105,19 @@ Using a date string:
 
 This will output something like (assuming the current date is 9th of April 2023)
 `3 months and 8 days`
+
+Using a timestamp sensor
+```jinja
+{% from 'relative_time_plus.jinja' import relative_time_plus %}
+{{ relative_time_plus('sensor.ha_last_booted', parts=2) }}
+```
+
+Using an input_number which represents a duration in hours
+```jinja
+{% from 'relative_time_plus.jinja' import relative_time_plus %}
+{{ relative_time_plus('input_number.hours_since_lunch', parts=2, duration=true, duration_unit='h') }}
+```
+
 
 ## My language is not suported
 You can either issue a PR with the language phrases, or create an issue with all the required phrases (so singular, plural and abbreviated per time section, a combine word and an error text) in an issue.
