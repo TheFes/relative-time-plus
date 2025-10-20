@@ -63,7 +63,7 @@ Other optional fields are:
 |`always_show`|list or string|`[]`|`['yr', 'mth', 'day']`|Provide the time periods you always want to show, even when they are zero. With the example the output could be `"0 years, 0 months and 19 days"`. Use `'all'` to always show all time parts. You can use `not_use` to exclude time parts from `'all'`|
 |`time`|boolean|`true`|`false`|Set to `false` to ignore time and only compare on date|
 |`abbr`|boolean|`false`|`true`|Set to `true` to use the abbreviated phrases|
-|`language`|string|`"en"`|`"nl"`|The language code (eg `da` for Denmark) for the language to be used for the output|
+|`language`|string|`"en"`|`"nl"`|The language code (eg `da` for Danish) for the language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
 |`round_mode`|string|`"floor"`|`"commmon"`|Determines how the last outputted value should be rounded. `"common"` will round up if the remainder is half or more, `"ceil"` will always round up if there is a remaining part, `"floor"` not take the remaining part into account|
 |`duration`|boolean|`false`|`true`|Set to `true` in case the input a duration (e.g 1235 seconds) instead of a datetime or timestamp. In case the input is a sensor with `state_class: duration` it will be derived from the sensor automatically
