@@ -29,7 +29,7 @@ Current supported languages:
 |---|---|---|
 |Bulgarian|`bg`|[Georgi Iliev](https://github.com/georgi-m-iliev)|
 |Czech|`cs`|[supperka](https://github.com/supperka)|
-|Danish|`dk`|[C4-Dimitri](https://github.com/C4-Dimitri)|
+|Danish|`da`|[C4-Dimitri](https://github.com/C4-Dimitri)|
 |Dutch|`nl`|[TheFes](https://github.com/TheFes)|
 |English|`en`|[TheFes](https://github.com/TheFes)|
 |Finish|`fi`|[samhaa](https://github.com/samhaa)|
