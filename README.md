@@ -60,6 +60,8 @@ The only required field is the datetime you want to show as relative time. It ca
 You can also directly use an entity_id as input. The macro will retreive the state of the sensor automatically, and will also check if it is a sensor with `state_class: duration`. If that is the case, it will treat the input as duration instead of as a timestamp.
 In case an input_datetime entity is used, and this input_datetime is set to time only, the macro will convert it to that time today.
 
+It is also possible to provide a `timedelta` object as input for the macro. In that case it will basically do the same as the built in `timedelta_string`  function, but with the additonal options as translations and control of which units to use.
+
 Other optional fields are:
 
 |name|type|default|example|description|
@@ -72,8 +74,8 @@ Other optional fields are:
 |`language`|string|`"en"`|`"nl"`|The language code (eg `da` for Danish) for the language to be used for the output|
 |`compare_date`|datetime or timestamp|`now()`|`12345`|The datetime to compare the other datetime to|
 |`round_mode`|string|`"floor"`|`"commmon"`|Determines how the last outputted value should be rounded. `"common"` will round up if the remainder is half or more, `"ceil"` will always round up if there is a remaining part, `"floor"` not take the remaining part into account|
-|`duration`|boolean|`false`|`true`|Set to `true` in case the input a duration (e.g 1235 seconds) instead of a datetime or timestamp. In case the input is a sensor with `state_class: duration` it will be derived from the sensor automatically
-|`duration_unit`|string|`"s"`|`"h"`|The unit of measurement in case the input is a duration. Can be "d", "h", "min", "ms", "s", or "μs". In case the input is sensor with `state_class: duration` it will be derived from the sensor automatically
+|`duration`|boolean|`false`|`true`|Set to `true` in case the input a duration (e.g 1235 seconds) instead of a datetime or timestamp. In case the input is a sensor with `state_class: duration` it will be derived from the sensor automatically. In case a `timedelta` object is uses as input, this can be omitted.
+|`duration_unit`|string|`"s"`|`"h"`|The unit of measurement in case the input is a duration. Can be "d", "h", "min", "ms", "s", or "μs". In case the input is sensor with `state_class: duration` it will be derived from the sensor automatically. In case a `timedelta` object is uses as input, this can be omitted.
 
 Example usage:
 Using a sensor state:
